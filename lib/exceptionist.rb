@@ -57,6 +57,7 @@ module Exceptionist
     case options[:notifier]
     when :smtp then @@notifier = ::Exceptionist::Notifiers::SmtpNotifier.new options
     when :console then @@notifier = ::Exceptionist::Notifiers::ConsoleNotifier.new options
+    when :amqp then @@notifier = ::Exceptionist::Notifiers::AmqpNotifier.new options
     else
       raise "Invalid notifier configuration: #{options} is not a valid :notifier setting!"
     end

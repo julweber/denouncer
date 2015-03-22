@@ -1,3 +1,5 @@
+require 'time'
+
 module Exceptionist
   module Notifiers
     class BaseNotifier
@@ -15,7 +17,7 @@ module Exceptionist
       def get_current_timestamp
         Time.now.utc.iso8601
       end
-      
+
       def set_configuration!(options)
         raise NotImplementedException("This method needs to be implemented in a sub-class!")
       end

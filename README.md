@@ -79,6 +79,40 @@ For more information in mailcatcher please refer to their [github repo](https://
       recipients: ['usera@example.com', 'userb@example.com']
     )
 
+### AmqpNotifier
+
+Exceptionist uses the bunny gem to send mail. Additional configuration options are described [here](http://reference.rubybunny.info/).
+
+#### !!!ATTENTION
+
+The bunny gem is required for the AmqpNotifier. Please add the bunny gem to your Gemfile as follows:
+
+    gem 'bunny'
+
+    Configuration variables are:
+    * application_name - the name of your application (required)
+    * server - the amqp server address to use (default: localhost)
+    * port - the port to use for amqp connections (default: 5672)
+    * username - the username for the amqp connection (default: 'guest')
+    * password - the password for the amqp connection (default: 'guest')
+    * vhost - the virtual host to use for the amqp connection (default: '/')
+    * message_queue - the message queue to use (default: "#{application_name}.errors", e.g. "myapp.errors")
+
+#### AMQP Configuration
+
+require 'exceptionist'
+
+Exceptionist.configure(
+  application_name: "my_app",
+  notifier: :amqp,
+  port: 5672,
+  server: "localhost",
+  vhost: "/",
+  username: "guest",
+  password: "guest",
+  message_queue: "my_app.errors"
+)
+
 ## Usage
 
 The example below shows a basic usage pattern for exceptionist notifications.
