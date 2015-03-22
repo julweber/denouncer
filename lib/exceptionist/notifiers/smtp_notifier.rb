@@ -27,14 +27,15 @@ module Exceptionist
       # @param metadata [Hash]
       def notify(error, metadata = nil)
         Net::SMTP.start(config[:server], config[:port], config[:domain], config[:username], config[:password], config[:authtype]) do |smtp|
-          smtp.send_message generate_html_message(error), config[:sender], config[:recipients]
+          smtp.send_message generate_text_message(error), config[:sender], config[:recipients]
         end
       end
 
       private
 
-      def generate_html_message(error, metadata = nil)
+      def generate_text_message(error, metadata = nil)
         hostname = Socket.gethostname
+        time_now = get_current_timestamp
         msgstr = <<END_OF_MESSAGE
 From: #{config[:application_name]} <#{config[:sender]}>
 Subject: [ERROR] - #{config[:application_name]} - An exception occured
@@ -47,7 +48,7 @@ Hostname:
 #{hostname}
 
 Notification time:
-#{get_current_timestamp} UTC
+#{time_now} UTC
 
 Error class:
 #{error.class.name}

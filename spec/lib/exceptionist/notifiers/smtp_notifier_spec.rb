@@ -2,8 +2,15 @@ require 'spec_helper'
 
 describe Exceptionist::Notifiers::SmtpNotifier do
   let(:error) do
-    StandardError.new("Test")
+    error = nil
+    begin
+      1/0
+    rescue => err
+      error = err
+    end
+    error
   end
+  let(:app_name) { "my_app" }
   let(:server) { 'localhost' }
   let(:port) { 1025 }
   let(:domain) { 'localhost' }
@@ -12,7 +19,7 @@ describe Exceptionist::Notifiers::SmtpNotifier do
   let(:authtype) { nil }
   let(:config) do
     {
-      application_name: "my_app",
+      application_name: app_name,
       notifier: :smtp,
       port: port,
       server: server,
@@ -89,6 +96,37 @@ describe Exceptionist::Notifiers::SmtpNotifier do
           expect { notifier.set_configuration! invalid }.to raise_error
         end
       end
+    end
+  end
+
+  describe "#generate_text_message" do
+    let(:notifier) { Exceptionist::Notifiers::SmtpNotifier.new config }
+    let(:metadata_var) { "HASHVAR123" }
+    let(:metadata) { { hash_var: metadata_var } }
+
+    it "should generate a text message" do
+      msg = notifier.send(:generate_text_message, error, metadata)
+      expect(msg).to be_kind_of String
+    end
+
+    it "should contain the error message" do
+      msg = notifier.send(:generate_text_message, error, metadata)
+      expect(msg).to match error.message
+    end
+
+    it "should contain the error class" do
+      msg = notifier.send(:generate_text_message, error, metadata)
+      expect(msg).to match error.class.name
+    end
+
+    it "should contain the application_name" do
+      msg = notifier.send(:generate_text_message, error, metadata)
+      expect(msg).to match app_name
+    end
+
+    it "should contain the metadata hash" do
+      msg = notifier.send(:generate_text_message, error, metadata)
+      expect(msg).to match metadata_var
     end
   end
 end

@@ -87,9 +87,15 @@ Catch exceptions, then use exceptionist's notify function and the re-raise the e
     begin
       1/0
     rescue => err
-      Exceptionist.notify err
+      Exceptionist.notify err, { test: "my metadata 1", test2: "my metadata 2" }
       raise err
     end
+
+The metadata is optional and defaults to nil.
+
+## Test Suite
+
+    bundle exec rspec
 
 ## Contributing
 
