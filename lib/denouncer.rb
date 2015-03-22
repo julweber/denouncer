@@ -39,7 +39,7 @@ module Denouncer
   # @param metadata [Hash]
   def self.notify(error, metadata = nil)
     raise "Denouncer is not configured yet. Please run Denouncer.configure(options) to setup denouncer!" if @@notifier.nil?
-    notifier.notify error
+    notifier.notify error, metadata
   end
 
   private

@@ -7,6 +7,9 @@ describe Denouncer do
   let(:error) do
     StandardError.new("Test")
   end
+  let(:metadata) do
+    { var1: "abc" }
+  end
 
   before do
     Denouncer.reset_configuration
@@ -141,8 +144,8 @@ describe Denouncer do
 
       it "should call it's notifiers notify method" do
         notifier = Denouncer.send(:notifier)
-        expect(notifier).to receive(:notify)
-        Denouncer.notify error
+        expect(notifier).to receive(:notify).with(error, metadata)
+        Denouncer.notify error, metadata
       end
     end
 
