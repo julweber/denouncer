@@ -22,11 +22,7 @@ module Exceptionist
 
   def self.notify(error)
     raise "Exceptionist is not configured yet. Please run Exceptionist.configure(options) to setup exceptionist!" if @@notifier.nil?
-    begin
-      @@notifier.notify error
-    rescue
-      raise error
-    end
+    @@notifier.notify error
   end
 
   private
