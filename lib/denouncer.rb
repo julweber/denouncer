@@ -1,13 +1,13 @@
-require "exceptionist/version"
+require "denouncer/version"
 
-module Exceptionist
-  autoload :Notifiers, File.expand_path('../exceptionist/notifiers', __FILE__)
+module Denouncer
+  autoload :Notifiers, File.expand_path('../denouncer/notifiers', __FILE__)
 
   DEFAULT_NOTIFIER = :smtp
 
   @@notifier = nil
 
-  # Configures exceptionist using the specified configuration hash.
+  # Configures denouncer using the specified configuration hash.
   #
   # @param options [Hash] a configuration hash
   def self.configure(options)
@@ -38,7 +38,7 @@ module Exceptionist
   # @param error [StandardError]
   # @param metadata [Hash]
   def self.notify(error, metadata = nil)
-    raise "Exceptionist is not configured yet. Please run Exceptionist.configure(options) to setup exceptionist!" if @@notifier.nil?
+    raise "Denouncer is not configured yet. Please run Denouncer.configure(options) to setup denouncer!" if @@notifier.nil?
     notifier.notify error
   end
 
@@ -55,9 +55,9 @@ module Exceptionist
 
   def self.initialize_notifier(options)
     case options[:notifier]
-    when :smtp then @@notifier = ::Exceptionist::Notifiers::SmtpNotifier.new options
-    when :console then @@notifier = ::Exceptionist::Notifiers::ConsoleNotifier.new options
-    when :amqp then @@notifier = ::Exceptionist::Notifiers::AmqpNotifier.new options
+    when :smtp then @@notifier = ::Denouncer::Notifiers::SmtpNotifier.new options
+    when :console then @@notifier = ::Denouncer::Notifiers::ConsoleNotifier.new options
+    when :amqp then @@notifier = ::Denouncer::Notifiers::AmqpNotifier.new options
     else
       raise "Invalid notifier configuration: #{options} is not a valid :notifier setting!"
     end

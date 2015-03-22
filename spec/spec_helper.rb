@@ -1,7 +1,7 @@
 require 'simplecov'
 SimpleCov.start
 
-require_relative '../lib/exceptionist'
+require_relative '../lib/denouncer'
 require 'rspec'
 
 RSpec.configure do |config|

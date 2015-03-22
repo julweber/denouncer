@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Exceptionist::Notifiers::SmtpNotifier do
+describe Denouncer::Notifiers::SmtpNotifier do
   let(:error) do
     error = nil
     begin
@@ -35,14 +35,14 @@ describe Exceptionist::Notifiers::SmtpNotifier do
   describe "initialize" do
     context "valid configuration" do
       it "should set the configuration" do
-        notifier = Exceptionist::Notifiers::SmtpNotifier.new config
+        notifier = Denouncer::Notifiers::SmtpNotifier.new config
         expect(notifier.config).to eq config
       end
     end
   end
 
   describe "notify" do
-    let(:notifier) { Exceptionist::Notifiers::SmtpNotifier.new config }
+    let(:notifier) { Denouncer::Notifiers::SmtpNotifier.new config }
 
     it "should start a SMTP connection" do
       expect(Net::SMTP).to receive(:start).with(server, port, domain, username, password, authtype)
@@ -51,7 +51,7 @@ describe Exceptionist::Notifiers::SmtpNotifier do
   end
 
   describe "set_configuration!" do
-    let(:notifier) { Exceptionist::Notifiers::SmtpNotifier.new config }
+    let(:notifier) { Denouncer::Notifiers::SmtpNotifier.new config }
 
     context "valid configuration" do
       it "should not raise an error" do
@@ -100,7 +100,7 @@ describe Exceptionist::Notifiers::SmtpNotifier do
   end
 
   describe "#generate_text_message" do
-    let(:notifier) { Exceptionist::Notifiers::SmtpNotifier.new config }
+    let(:notifier) { Denouncer::Notifiers::SmtpNotifier.new config }
     let(:metadata_var) { "HASHVAR123" }
     let(:metadata) { { hash_var: metadata_var } }
 

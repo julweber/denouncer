@@ -1,6 +1,6 @@
-# Exceptionist
+# Denouncer
 
-Exceptionist allows you to send notifications for occuring errors within your ruby applications.
+Denouncer allows you to send notifications for occuring errors within your ruby applications.
 Right now it supports SMTP to send mail notifications with error details.
 The gem is designed to be extendable and provides a simple interface to implement other notification
 methods.
@@ -9,7 +9,7 @@ methods.
 
 Add this line to your application's Gemfile:
 
-    gem 'exceptionist'
+    gem 'denouncer'
 
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install exceptionist
+    $ gem install denouncer
 
 ## Configuration
 
@@ -48,10 +48,10 @@ Configuration variables are:
 
 #### External SMTP server
 
-Exceptionist uses the Net::SMTP class to send mail. Additional configuration options are described [here](http://ruby-doc.org/stdlib-2.0/libdoc/net/smtp/rdoc/Net/SMTP.html).
-    require 'exceptionist'
+Denouncer uses the Net::SMTP class to send mail. Additional configuration options are described [here](http://ruby-doc.org/stdlib-2.0/libdoc/net/smtp/rdoc/Net/SMTP.html).
+    require 'denouncer'
 
-    Exceptionist.configure(
+    Denouncer.configure(
       application_name: 'my_app',
       notifier: :smtp,
       port: 25,
@@ -68,9 +68,9 @@ Exceptionist uses the Net::SMTP class to send mail. Additional configuration opt
 
 For more information in mailcatcher please refer to their [github repo](https://github.com/sj26/mailcatcher).
 
-    require 'exceptionist'
+    require 'denouncer'
 
-    Exceptionist.configure(
+    Denouncer.configure(
       application_name: "my_app",
       notifier: :smtp,
       port: 1025,
@@ -81,7 +81,7 @@ For more information in mailcatcher please refer to their [github repo](https://
 
 ### AmqpNotifier
 
-Exceptionist uses the bunny gem to send mail. Additional configuration options are described [here](http://reference.rubybunny.info/).
+Denouncer uses the bunny gem to send mail. Additional configuration options are described [here](http://reference.rubybunny.info/).
 
 #### !!!ATTENTION
 
@@ -100,9 +100,9 @@ The bunny gem is required for the AmqpNotifier. Please add the bunny gem to your
 
 #### AMQP Configuration
 
-require 'exceptionist'
+require 'denouncer'
 
-Exceptionist.configure(
+Denouncer.configure(
   application_name: "my_app",
   notifier: :amqp,
   port: 5672,
@@ -115,13 +115,13 @@ Exceptionist.configure(
 
 ## Usage
 
-The example below shows a basic usage pattern for exceptionist notifications.
-Catch exceptions, then use exceptionist's notify function and the re-raise the error again.
+The example below shows a basic usage pattern for denouncer notifications.
+Catch exceptions, then use denouncer's notify function and the re-raise the error again.
 
     begin
       1/0
     rescue => err
-      Exceptionist.notify err, { test: "my metadata 1", test2: "my metadata 2" }
+      Denouncer.notify err, { test: "my metadata 1", test2: "my metadata 2" }
       raise err
     end
 
@@ -133,7 +133,7 @@ The metadata is optional and defaults to nil.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/exceptionist/fork )
+1. Fork it ( https://github.com/[my-github-username]/denouncer/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

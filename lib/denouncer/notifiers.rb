@@ -1,4 +1,4 @@
-module Exceptionist
+module Denouncer
   module Notifiers
     autoload :BaseNotifier, File.expand_path('../notifiers/base_notifier', __FILE__)
     autoload :ConsoleNotifier, File.expand_path('../notifiers/console_notifier', __FILE__)

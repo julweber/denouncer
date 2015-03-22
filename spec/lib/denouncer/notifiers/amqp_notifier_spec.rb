@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Exceptionist::Notifiers::AmqpNotifier do
+describe Denouncer::Notifiers::AmqpNotifier do
   let(:error) do
     error = nil
     begin
@@ -33,14 +33,14 @@ describe Exceptionist::Notifiers::AmqpNotifier do
   describe "initialize" do
     context "valid configuration" do
       it "should set the configuration" do
-        notifier = Exceptionist::Notifiers::AmqpNotifier.new config
+        notifier = Denouncer::Notifiers::AmqpNotifier.new config
         expect(notifier.config).to eq config
       end
     end
   end
 
   describe "set_configuration!" do
-    let(:notifier) { Exceptionist::Notifiers::AmqpNotifier.new config }
+    let(:notifier) { Denouncer::Notifiers::AmqpNotifier.new config }
 
     context "valid configuration" do
       it "should not raise an error" do
@@ -67,7 +67,7 @@ describe Exceptionist::Notifiers::AmqpNotifier do
   end
 
   describe "#generate_json_message" do
-    let(:notifier) { Exceptionist::Notifiers::AmqpNotifier.new config }
+    let(:notifier) { Denouncer::Notifiers::AmqpNotifier.new config }
     let(:metadata_var) { "HASHVAR123" }
     let(:metadata) { { hash_var: metadata_var } }
 

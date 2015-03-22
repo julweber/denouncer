@@ -1,7 +1,7 @@
 require 'socket'
 require 'json'
 
-module Exceptionist
+module Denouncer
   module Notifiers
     class AmqpNotifier < BaseNotifier
       DEFAULT_PORT = 5672

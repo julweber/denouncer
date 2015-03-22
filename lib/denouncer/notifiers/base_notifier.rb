@@ -1,6 +1,6 @@
 require 'time'
 
-module Exceptionist
+module Denouncer
   module Notifiers
     class BaseNotifier
       attr_reader :config

@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'exceptionist/version'
+require 'denouncer/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "exceptionist"
-  spec.version       = Exceptionist::VERSION
+  spec.name          = "denouncer"
+  spec.version       = Denouncer::VERSION
   spec.authors       = ["Julian Weber"]
   spec.email         = ["jweber@anynines.com"]
-  spec.summary       = %q{Exceptionist allows you to send notifications (SMTP, AMQP) with error/exception details using a simple interface.}
-  spec.description   = %q{Exceptionist allows you to send notifications with error/exception details using a simple interface. New methods of sending error messages can be implemented using a pre-defined class interface. SMTP and AMQP  notification are the first implemented adapters. Use exceptionist to get informed on error occurences instantly.}
-  spec.homepage      = "http://github.com/julweber/exceptionist"
+  spec.summary       = %q{Denouncer allows you to send notifications (SMTP, AMQP) with error/exception details using a simple interface.}
+  spec.description   = %q{Denouncer allows you to send notifications with error/exception details using a simple interface. New methods of sending error messages can be implemented using a pre-defined class interface. SMTP and AMQP  notification are the first implemented adapters. Use denouncer to get informed on error occurences instantly.}
+  spec.homepage      = "http://github.com/julweber/denouncer"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

@@ -2,7 +2,7 @@ require 'net/smtp'
 require 'time'
 require 'socket'
 
-module Exceptionist
+module Denouncer
   module Notifiers
     class SmtpNotifier < BaseNotifier
       DEFAULT_PORT = 25

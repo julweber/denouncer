@@ -1,4 +1,4 @@
-module Exceptionist
+module Denouncer
   module Notifiers
     class ConsoleNotifier < BaseNotifier
 

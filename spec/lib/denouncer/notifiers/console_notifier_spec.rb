@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Exceptionist::Notifiers::ConsoleNotifier do
+describe Denouncer::Notifiers::ConsoleNotifier do
   let(:config) { { application_name: "my_app" } }
-  let(:notifier) { Exceptionist::Notifiers::ConsoleNotifier.new config }
+  let(:notifier) { Denouncer::Notifiers::ConsoleNotifier.new config }
 
   describe "#set_configuration!" do
     it "should return the options" do
