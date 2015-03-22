@@ -9,20 +9,23 @@ module Exceptionist
       DEFAULT_SERVER = 'localhost'
       DEFAULT_DOMAIN = 'localhost'
 
+      # @raise [StandardError] if the configuration is invalid
       def set_configuration!(options)
+        raise "Configuration error: :application_name is not set!" if options[:application_name].nil?
         raise "SMTP configuration error: #{options[:sender]} is not a valid :sender setting!" if options[:sender].nil? || !options[:sender].is_a?(String)
         raise "SMTP configuration error: :recipients is nil!" if options[:recipients].nil?
 
         options[:server] = DEFAULT_SERVER if options[:server].nil?
         options[:port] = DEFAULT_PORT if options[:port].nil?
         options[:domain] = DEFAULT_DOMAIN if options[:domain].nil?
+        return options
       end
 
       # Sends an error notification via mail.
       #
-      # @param [StandardError]
-      def notify(error)
-        # http://ruby-doc.org/stdlib-2.0/libdoc/net/smtp/rdoc/Net/SMTP.html
+      # @param error [StandardError]
+      # @param metadata [Hash]
+      def notify(error, metadata = nil)
         Net::SMTP.start(config[:server], config[:port], config[:domain], config[:username], config[:password], config[:authtype]) do |smtp|
           smtp.send_message generate_html_message(error), config[:sender], config[:recipients]
         end
@@ -30,9 +33,8 @@ module Exceptionist
 
       private
 
-      def generate_html_message(error)
+      def generate_html_message(error, metadata = nil)
         hostname = Socket.gethostname
-        time_now = Time.now.utc.iso8601
         msgstr = <<END_OF_MESSAGE
 From: #{config[:application_name]} <#{config[:sender]}>
 Subject: [ERROR] - #{config[:application_name]} - An exception occured
@@ -45,7 +47,7 @@ Hostname:
 #{hostname}
 
 Notification time:
-#{time_now} UTC
+#{get_current_timestamp} UTC
 
 Error class:
 #{error.class.name}
@@ -58,6 +60,9 @@ Backtrace:
 
 Error cause:
 #{error.cause}
+
+Additional metadata:
+#{metadata.to_s}
 END_OF_MESSAGE
         return msgstr
       end

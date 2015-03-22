@@ -23,10 +23,28 @@ Or install it yourself as:
 ## Configuration
 
 The configuration options depend on the chosen Notifier.
-Default configuration variables are:
-* application_name - the name of your application
+Basic configuration variables are:
+* application_name - the name of your application (required)
 
-### SMTP Notifier
+### Console Notifier
+
+The ConsoleNotifier is just for testing and demo purposes. It prints out exception details on the command line.
+
+### SmtpNotifier
+
+The STMP notifier sends email messages using the SMTP protocol.
+Set the notifier configuration setting to :smtp to use the SmtpNotifier.
+
+Configuration variables are:
+* application_name - the name of your application (required)
+* server - the smtp server address to use (default: localhost)
+* port - the port to use for smtp connections (default: 25)
+* domain - the from domain to use (default: localhost)
+* username - the username for the smtp connection (default: nil)
+* password - the password for the smtp connection (default: nil)
+* authtype - the smtp auth type to use (default: :cram_md5) (:plain, :login or :cram_md5)
+* sender - the sender (from) address to use (required)
+* recipients - an array of recipients for the notifications (required)
 
 #### External SMTP server
 
@@ -62,6 +80,9 @@ For more information in mailcatcher please refer to their [github repo](https://
     )
 
 ## Usage
+
+The example below shows a basic usage pattern for exceptionist notifications.
+Catch exceptions, then use exceptionist's notify function and the re-raise the error again.
 
     begin
       1/0
