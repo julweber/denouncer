@@ -40,14 +40,18 @@ module Denouncer
   # @param error [StandardError]
   # @param metadata [Hash]
   def self.notify(error, metadata = nil)
-    raise "Denouncer is not configured yet. Please run Denouncer.configure(options) to setup denouncer!" if @@notifier.nil?
-    # ATTENTION: this ensures that no exceptions are lost when denouncer is not working as expected!!!
-    # This is worth the downside of denouncer debugging thougths.
-    begin
-      notifier.notify error, metadata
-    rescue => err
-      puts "An error occured while sending an exception notification via denouncer!"
-      raise error
+    if is_configured?
+      # ATTENTION: this ensures that no exceptions are lost when denouncer is not working as expected!!!
+      # This is worth the downside of denouncer debugging thougths.
+      begin
+        notifier.notify error, metadata
+        return true
+      rescue => err
+        puts "An error occured while sending an exception notification via denouncer!"
+        raise error
+      end
+    else
+      return false
     end
   end
 

@@ -147,11 +147,15 @@ describe Denouncer do
         expect(notifier).to receive(:notify).with(error, metadata)
         Denouncer.notify error, metadata
       end
+
+      it "should return true" do
+        expect(Denouncer.notify error).to be_truthy
+      end
     end
 
     context "unconfigured" do
-      it "should raise an error" do
-        expect { Denouncer.notify error }.to raise_error
+      it "should return false" do
+        expect(Denouncer.notify error).to be_falsey
       end
     end
   end
