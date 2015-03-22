@@ -27,7 +27,7 @@ module Denouncer
       # @param metadata [Hash]
       def notify(error, metadata = nil)
         Net::SMTP.start(config[:server], config[:port], config[:domain], config[:username], config[:password], config[:authtype]) do |smtp|
-          smtp.send_message generate_text_message(error), config[:sender], config[:recipients]
+          smtp.send_message generate_text_message(error, metadata), config[:sender], config[:recipients]
         end
       end
 
@@ -62,7 +62,7 @@ Backtrace:
 Error cause:
 #{error.cause}
 
-Additional metadata:
+Metadata:
 #{metadata.to_s}
 END_OF_MESSAGE
         return msgstr
