@@ -14,6 +14,8 @@ module Denouncer
     check_base_configuration! options
     if options[:notifier].nil?
       options[:notifier] = DEFAULT_NOTIFIER
+    else
+      options[:notifier] = options[:notifier].to_sym
     end
     initialize_notifier options
     options

@@ -18,6 +18,7 @@ module Denouncer
         options[:server] = DEFAULT_SERVER if options[:server].nil?
         options[:port] = DEFAULT_PORT if options[:port].nil?
         options[:domain] = DEFAULT_DOMAIN if options[:domain].nil?
+        options[:authtype] = options[:authtype].to_sym unless options[:authtype].nil?
         return options
       end
 
