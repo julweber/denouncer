@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Exceptionist::VERSION
   spec.authors       = ["Julian Weber"]
   spec.email         = ["jweber@avarteq.de"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Exceptionist allows you to send notifications (SMTP) with error/exception details using a simple interface.}
+  spec.description   = %q{Exceptionist allows you to send notifications with error/exception details using a simple interface. New methods of sending error messages can be implemented using a pre-defined class interface. SMTP notiication is the first implemented adapter.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
