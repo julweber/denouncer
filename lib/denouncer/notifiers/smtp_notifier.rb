@@ -58,7 +58,7 @@ Error message:
 #{error.message}
 
 Backtrace:
-#{error.backtrace}
+#{formatted_backtrace(error)}
 
 Error cause:
 #{error.cause}
@@ -68,6 +68,17 @@ Metadata:
 END_OF_MESSAGE
         return msgstr
       end
+
+      def formatted_backtrace(error)
+        bt = error.backtrace
+        return "No backtrace available!" if bt.nil?
+        str = ""
+        bt.each do |line|
+          str << line << "\n"
+        end
+        return str
+      end
+
     end
   end
 end
