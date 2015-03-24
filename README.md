@@ -100,18 +100,18 @@ Configuration variables are:
 
 #### AMQP Configuration
 
-require 'denouncer'
+    require 'denouncer'
 
-Denouncer.configure(
-  application_name: "my_app",
-  notifier: :amqp,
-  port: 5672,
-  server: "localhost",
-  vhost: "/",
-  username: "guest",
-  password: "guest",
-  message_queue: "my_app.errors"
-)
+    Denouncer.configure(
+      application_name: "my_app",
+      notifier: :amqp,
+      port: 5672,
+      server: "localhost",
+      vhost: "/",
+      username: "guest",
+      password: "guest",
+      message_queue: "my_app.errors"
+    )
 
 ## Usage
 
