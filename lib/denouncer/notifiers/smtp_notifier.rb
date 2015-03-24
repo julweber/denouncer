@@ -41,7 +41,7 @@ module Denouncer
         msgstr = <<END_OF_MESSAGE
 From: #{config[:application_name]} <#{config[:sender]}>
 To: #{recipients_list}
-Subject: [ERROR] - #{config[:application_name]} - An exception occured
+Subject: #{generate_subject(error)}
 Date: #{formatted_time(time_now)}
 
 Application name:
@@ -67,6 +67,10 @@ Error cause:
 
 Metadata:
 #{metadata.to_s}
+
+-- -- -- -- -- -- -- -- -- -- --
+This message was generated using the denouncer exception notifier gem.
+( http://github.com/julweber/denouncer )
 END_OF_MESSAGE
         return msgstr
       end
@@ -97,6 +101,9 @@ END_OF_MESSAGE
         return str
       end
 
+      def generate_subject(error)
+        "[Denouncer] - [Error] - #{config[:application_name]} - #{error.class.name} - #{get_current_timestamp.to_s}"
+      end
     end
   end
 end
