@@ -15,7 +15,7 @@ module Denouncer
 
       # Returns the current timestamp in utc is8601 format
       def get_current_timestamp
-        Time.now.utc.iso8601
+        Time.now.utc
       end
 
       def set_configuration!(options)

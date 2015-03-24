@@ -7,7 +7,7 @@ module Denouncer
       end
 
       def notify(error, metadata = nil)
-        puts "Timestamp: #{get_current_timestamp}"
+        puts "Timestamp: #{get_current_timestamp.to_s}"
         puts "Error Class: #{error.class.name}"
         puts "Error Message: #{error.message}"
         puts "Metadata: #{metadata.to_s}"

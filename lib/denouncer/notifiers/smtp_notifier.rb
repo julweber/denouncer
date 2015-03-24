@@ -37,10 +37,12 @@ module Denouncer
       def generate_text_message(error, metadata = nil)
         hostname = Socket.gethostname
         time_now = get_current_timestamp
+        recipients_list = formatted_recipients
         msgstr = <<END_OF_MESSAGE
 From: #{config[:application_name]} <#{config[:sender]}>
+To: #{recipients_list}
 Subject: [ERROR] - #{config[:application_name]} - An exception occured
-Date: #{time_now}
+Date: #{formatted_time(time_now)}
 
 Application name:
 #{config[:application_name]}
@@ -67,6 +69,22 @@ Metadata:
 #{metadata.to_s}
 END_OF_MESSAGE
         return msgstr
+      end
+
+      def formatted_recipients
+        rec = ""
+        config[:recipients].each_with_index do |r, i|
+          if (i == config[:recipients].length - 1)
+            rec << r
+          else
+            rec << r << ", "
+          end
+        end
+        rec
+      end
+
+      def formatted_time(time)
+        time.strftime("%a, %e %b %Y %H:%M:%S %z")
       end
 
       def formatted_backtrace(error)
