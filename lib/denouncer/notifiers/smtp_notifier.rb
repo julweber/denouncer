@@ -51,7 +51,7 @@ Hostname:
 #{hostname}
 
 Notification time:
-#{time_now} UTC
+#{time_now}
 
 Error class:
 #{error.class.name}
