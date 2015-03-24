@@ -5,6 +5,10 @@ Right now it supports SMTP to send mail notifications with error details.
 The gem is designed to be extendable and provides a simple interface to implement other notification
 methods.
 
+## Status
+
+[![Gem Version](https://badge.fury.io/rb/denouncer.svg)](http://badge.fury.io/rb/denouncer)
+
 ## Installation
 
 Add this line to your application's Gemfile:
