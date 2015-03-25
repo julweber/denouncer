@@ -139,6 +139,10 @@ The metadata is optional and defaults to nil.
 
     bundle exec rspec
 
+## Architecture overview
+
+[This](https://docs.google.com/drawings/d/16DaQhsAwcr-5zlguhKGwigpdNpOgO4-IXssLst7zlUM/edit?usp=sharing) illustration shows the basic architecture of the denouncer gem.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/denouncer/fork )
