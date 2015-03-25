@@ -124,13 +124,21 @@ Configuration variables are:
 ## Usage
 
 The example below shows a basic usage pattern for denouncer notifications.
-Catch exceptions, then use denouncer's notify function and the re-raise the error again.
+Catch exceptions, then use denouncer's notify function and then re-raise the error again.
 
     begin
       1/0
     rescue => err
       Denouncer.notify err, { test: "my metadata 1", test2: "my metadata 2" }
       raise err
+    end
+
+or
+
+    begin
+      1/0
+    rescue => err
+      Denouncer.notify! err, { test: "my metadata 1", test2: "my metadata 2" }
     end
 
 The metadata is optional and defaults to nil.

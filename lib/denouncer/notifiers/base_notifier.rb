@@ -38,6 +38,17 @@ module Denouncer
       def notify(error, metadata = nil)
         raise NotImplementedException("This method needs to be implemented in a sub-class!")
       end
+
+      # Sends a notification
+      # raises the given error after notifying using the configured adapter
+      #
+      # @param error [StandardError]
+      # @param metadata [Hash]
+      # @raise [StandardError]
+      def notify!(error, metadata = nil)
+        notify error, metadata
+        raise error
+      end
     end
   end
 end

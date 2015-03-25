@@ -55,6 +55,12 @@ module Denouncer
     end
   end
 
+  def self.notify!(error, metadata = nil)
+    if is_configured?
+      notifier.notify! error, metadata
+    end
+  end
+
   private
 
   def self.notifier
