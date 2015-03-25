@@ -18,6 +18,15 @@ module Denouncer
         Time.now.utc
       end
 
+      # returns the given error's cause if available
+      def get_error_cause(error)
+        if error.respond_to? :cause
+          error.cause
+        else
+          nil
+        end
+      end
+
       def set_configuration!(options)
         raise NotImplementedException("This method needs to be implemented in a sub-class!")
       end

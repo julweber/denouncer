@@ -45,7 +45,7 @@ module Denouncer
           error_class: error.class.name,
           error_backtrace: error.backtrace,
           error_message: error.message,
-          error_cause: error.cause,
+          error_cause: get_error_cause(error),
           metadata: metadata
         }
       end

@@ -63,7 +63,7 @@ Backtrace:
 #{formatted_backtrace(error)}
 
 Error cause:
-#{error.cause}
+#{get_error_cause(error)}
 
 Metadata:
 #{metadata.to_s}
