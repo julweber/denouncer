@@ -5,7 +5,11 @@ Right now it supports SMTP to send mail notifications with error details.
 The gem is designed to be extendable and provides a simple interface to implement other notification
 methods.
 
-## Status
+## Build status
+
+[![Build Status](https://travis-ci.org/julweber/denouncer.svg)](https://travis-ci.org/julweber/denouncer)
+
+## Current gem version
 
 [![Gem Version](https://badge.fury.io/rb/denouncer.svg)](http://badge.fury.io/rb/denouncer)
 

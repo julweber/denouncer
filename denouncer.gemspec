@@ -8,10 +8,12 @@ Gem::Specification.new do |spec|
   spec.version       = Denouncer::VERSION
   spec.authors       = ["Julian Weber"]
   spec.email         = ["jweber@anynines.com"]
-  spec.summary       = %q{Denouncer allows you to send notifications (SMTP, AMQP) with error/exception details using a simple interface.}
-  spec.description   = %q{Denouncer allows you to send notifications with error/exception details using a simple interface. New methods of sending error messages can be implemented using a pre-defined class interface. SMTP and AMQP  notification are the first implemented adapters. Use denouncer to get informed on error occurences instantly.}
+  spec.summary       = %q{Denouncer allows you to send notifications (SMTP, AMQP) with error/exception details using a simple interface. Denouncer is usable for all ruby applications, Rails is not required.}
+  spec.description   = %q{Denouncer allows you to send notifications with error/exception details using a simple interface. New methods of sending error messages can be implemented using a pre-defined class interface. SMTP and AMQP  notification are the first implemented adapters. Denouncer is usable for all ruby applications, Rails is not required. Use denouncer to get informed on error occurences instantly.}
   spec.homepage      = "http://github.com/julweber/denouncer"
   spec.license       = "MIT"
+
+  spec.required_ruby_version = '>= 1.9.0'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
