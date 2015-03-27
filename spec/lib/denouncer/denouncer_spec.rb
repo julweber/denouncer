@@ -1,9 +1,22 @@
 require 'spec_helper'
 
 describe Denouncer do
+  let(:app_name) { "MyApplication" }
   let(:notifier_configuration) do
-    { application_name: "MyApplication", notifier: :console }
+    { application_name: app_name, notifier: :console }
   end
+
+  let(:multiple_notifier_configuration) do
+    {
+      application_name: app_name,
+      notifiers: [:console, :console],
+      configurations: {
+        console: {
+        }
+      }
+    }
+  end
+
   let(:error) do
     StandardError.new("Test")
   end
@@ -30,9 +43,10 @@ describe Denouncer do
         expect(Denouncer.config).to eq new_configuration
       end
 
-      it "should initialize a notifier" do
+      it "should initialize notifiers" do
         Denouncer.configure new_configuration
-        expect(Denouncer.send(:notifier)).not_to be_nil
+        expect(Denouncer.send(:notifiers)).not_to be_nil
+        expect(Denouncer.send(:notifiers)).to be_instance_of Array
       end
     end
 
@@ -42,9 +56,10 @@ describe Denouncer do
         expect(Denouncer.config).to eq new_configuration
       end
 
-      it "should initialize a notifier" do
+      it "should initialize notifiers" do
         Denouncer.configure new_configuration
-        expect(Denouncer.send(:notifier)).not_to be_nil
+        expect(Denouncer.send(:notifiers)).not_to be_nil
+        expect(Denouncer.send(:notifiers)).to be_instance_of Array
       end
     end
 
@@ -85,6 +100,51 @@ describe Denouncer do
         end
       end
     end
+
+    context 'multiple notifiers' do
+      context 'unconfigured' do
+        it 'should initialize the configuration' do
+          Denouncer.configure multiple_notifier_configuration
+          expect(Denouncer.config).not_to be_nil
+        end
+
+        it "should initialize notifiers" do
+          Denouncer.configure multiple_notifier_configuration
+          expect(Denouncer.send(:notifiers)).to be_instance_of Array
+          expect(Denouncer.send(:notifiers).count).to eq multiple_notifier_configuration[:notifiers].count
+        end
+      end
+
+      context 'invalid settings hash' do
+        context ':notifier and :notifiers setting provided' do
+          let(:invalid) do
+            {
+              application_name: "TestAppThing",
+              notifier: :amqp,
+              notifiers: [:amqp,:smtp]
+            }
+          end
+
+          it 'should raise an error' do
+            expect { Denouncer.configure invalid }.to raise_error
+          end
+        end
+
+        context 'without :configurations sub-hash' do
+          let(:invalid) do
+            {
+              application_name: "TestAppThing",
+              notifiers: [:amqp,:smtp]
+            }
+          end
+
+          it 'should raise an error' do
+            expect { Denouncer.configure invalid }.to raise_error
+          end
+        end
+
+      end
+    end
   end
 
   describe ".is_configured?" do
@@ -110,7 +170,7 @@ describe Denouncer do
       Denouncer.configure notifier_configuration
     end
 
-    it "should set the notifier to nil" do
+    it "should set the configuration to nil" do
       Denouncer.reset_configuration
       expect(Denouncer.config).to be_nil
       expect(Denouncer.is_configured?).to be_falsey
@@ -119,13 +179,34 @@ describe Denouncer do
 
   describe ".config" do
     context "configured" do
-      before do
-        Denouncer.configure notifier_configuration
+      context "single notifier" do
+        before do
+          Denouncer.configure notifier_configuration
+        end
+
+        it "should return the notifier's configuration" do
+          notifier = Denouncer.send(:notifiers).first
+          expect(Denouncer.config).to eq notifier.config
+        end
       end
 
-      it "should return the notifier's configuration" do
-        notifier = Denouncer.send(:notifier)
-        expect(Denouncer.config).to eq notifier.config
+      context 'multiple notifiers' do
+        before do
+          Denouncer.configure multiple_notifier_configuration
+        end
+
+        it "should return a hash of configurations" do
+          notifiers = Denouncer.send(:notifiers)
+          notifier_symbols = notifiers.map { |n| n.name.to_sym }
+          expected_config = {
+            application_name: app_name,
+            notifiers: notifier_symbols,
+            configurations: {
+              console: notifiers.first.config
+            }
+          }
+          expect(Denouncer.config).to eq expected_config
+        end
       end
     end
 
@@ -136,26 +217,78 @@ describe Denouncer do
     end
   end
 
-  describe ".notify" do
-    context "configured" do
+  describe ".notify!" do
+    context "single notifier" do
       before do
         Denouncer.configure notifier_configuration
       end
 
-      it "should call it's notifiers notify method" do
-        notifier = Denouncer.send(:notifier)
-        expect(notifier).to receive(:notify).with(error, metadata)
+      it "should call it's notifier's notify method and raise the given error" do
+        notifiers = Denouncer.send(:notifiers)
+        notifiers.each do |notif|
+          expect(notif).to receive(:notify).with(error, metadata)
+        end
+        expect { Denouncer.notify! error, metadata }.to raise_error error
+      end
+    end
+
+    context "multiple notifiers" do
+      before do
+        Denouncer.configure multiple_notifier_configuration
+      end
+
+      it "should call it's notifier's notify method and raise the given error" do
+        notifiers = Denouncer.send(:notifiers)
+        notifiers.each do |notif|
+          expect(notif).to receive(:notify).with(error, metadata)
+        end
+        expect { Denouncer.notify! error, metadata }.to raise_error error
+      end
+    end
+  end
+
+  describe ".notify" do
+    context "single notifier configured" do
+      context "configured" do
+        before do
+          Denouncer.configure notifier_configuration
+        end
+
+        it "should call it's notifier's notify method" do
+          notifiers = Denouncer.send(:notifiers)
+          notifiers.each do |notif|
+            expect(notif).to receive(:notify).with(error, metadata)
+          end
+          Denouncer.notify error, metadata
+        end
+
+        it "should return true" do
+          expect(Denouncer.notify error).to be_truthy
+        end
+      end
+
+      context "unconfigured" do
+        it "should return false" do
+          expect(Denouncer.notify error).to be_falsey
+        end
+      end
+    end
+
+    context "multiple notifiers configured" do
+      before do
+        Denouncer.configure multiple_notifier_configuration
+      end
+
+      it "should call all configured notifiers' notify method" do
+        notifiers = Denouncer.send(:notifiers)
+        notifiers.each do |notif|
+          expect(notif).to receive(:notify).with(error, metadata)
+        end
         Denouncer.notify error, metadata
       end
 
       it "should return true" do
         expect(Denouncer.notify error).to be_truthy
-      end
-    end
-
-    context "unconfigured" do
-      it "should return false" do
-        expect(Denouncer.notify error).to be_falsey
       end
     end
   end

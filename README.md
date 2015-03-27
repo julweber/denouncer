@@ -121,6 +121,37 @@ Configuration variables are:
       message_queue: "my_app.errors"
     )
 
+#### Multiple notifier configuration
+
+Since version 0.4.0 denouncer supports parallel usage of multiple notifiers.
+All exception notifications will be send to all configured notifiers.
+The example below configures the amqp and smtp notifiers in parallel.
+
+    require 'denouncer'
+
+    Denouncer.configure(
+      {
+        application_name: "my_app",
+        notifiers: [:smtp, :amqp],
+        configurations: {
+          smtp: {
+            port: 1025,
+            server: "localhost",
+            sender: "noreply@example.com",
+            recipients: ['usera@example.com', 'userb@example.com']
+          },
+          amqp: {
+            port: 5672,
+            server: "localhost",
+            vhost: "/",
+            username: "guest",
+            password: "guest",
+            message_queue: "my_app.errors"
+          }
+        }
+      }
+    )
+
 ## Usage
 
 The example below shows a basic usage pattern for denouncer notifications.

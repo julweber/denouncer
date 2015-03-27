@@ -1,6 +1,11 @@
 module Denouncer
   module Notifiers
     class ConsoleNotifier < BaseNotifier
+      
+      # @return [String]
+      def name
+        'console'
+      end
 
       def set_configuration!(options)
         return options

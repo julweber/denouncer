@@ -9,6 +9,11 @@ module Denouncer
       DEFAULT_SERVER = 'localhost'
       DEFAULT_DOMAIN = 'localhost'
 
+      # @return [String]
+      def name
+        'smtp'
+      end
+
       # @raise [StandardError] if the configuration is invalid
       def set_configuration!(options)
         raise "Configuration error: :application_name is not set!" if options[:application_name].nil?

@@ -10,11 +10,15 @@ module Denouncer
       DEFAULT_USERNAME = 'guest'
       DEFAULT_PASSWORD = 'guest'
 
-      # @raise [StandardError] if the configuration is invalid
-      def set_configuration!(options)
-        require 'bunny'
-        raise "Configuration error: :application_name is not set!" if options[:application_name].nil?
+      # @return [String]
+      def name
+        'amqp'
+      end
 
+      def set_configuration!(options)
+        raise "Configuration error: :application_name is not set!" if options[:application_name].nil?
+        require 'bunny'
+        
         options[:server] = DEFAULT_SERVER if options[:server].nil?
         options[:port] = DEFAULT_PORT if options[:port].nil?
         options[:vhost] = DEFAULT_VHOST if options[:vhost].nil?
