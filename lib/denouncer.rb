@@ -137,19 +137,9 @@ module Denouncer
   end
 
   def self.get_notifier_class(notifier_symbol)
-    notifier_class = nil
-
-    case notifier_symbol
-    when :smtp then
-      notifier_class = ::Denouncer::Notifiers::SmtpNotifier
-    when :console then
-      notifier_class = ::Denouncer::Notifiers::ConsoleNotifier
-    when :amqp then
-      notifier_class = ::Denouncer::Notifiers::AmqpNotifier
-    else
-      raise "Invalid notifier configuration: #{options} is not a valid :notifier setting!"
-    end
-
-    return notifier_class
+    class_name = "::Denouncer::Notifiers::#{notifier_symbol.to_s.capitalize}Notifier"
+    Kernel.const_get(class_name)
+  rescue => err
+    raise "Invalid notifier configuration: #{notifier_symbol} is not a valid :notifier setting! Error: #{err.message} !"
   end
 end

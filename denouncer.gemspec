@@ -26,4 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "bunny"
+  spec.add_development_dependency "honeybadger"
+  spec.add_development_dependency "rack"
 end

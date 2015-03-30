@@ -121,6 +121,27 @@ Configuration variables are:
       message_queue: "my_app.errors"
     )
 
+#### HoneybadgerNotifier
+
+For more information on honeybadger please refer to their [github repo](https://github.com/honeybadger-io/honeybadger-ruby).
+
+#### !!!ATTENTION
+
+The honeybadger and rack gems are required for the HoneybadgerNotifier. Please add the gems to your Gemfile as follows:
+
+    gem 'honeybadger'
+    gem 'rack'
+
+Honeybadger is automatically configured using environment variables (e.g. HONEYBADGER_API_KEY). For a more detailed documentation please have a look at [their instructions](http://docs.honeybadger.io/collection/7-getting-started).
+
+    require 'denouncer'
+
+    Denouncer.configure(
+      application_name: "my_app",
+      notifier: :honeybadger
+    )
+
+
 #### Multiple notifier configuration
 
 Since version 0.4.0 denouncer supports parallel usage of multiple notifiers.
