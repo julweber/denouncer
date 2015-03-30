@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bunny"
   spec.add_development_dependency "honeybadger"
   spec.add_development_dependency "rack"
+  spec.add_development_dependency "airbrake"
 end

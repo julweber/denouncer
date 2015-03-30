@@ -141,6 +141,26 @@ Honeybadger is automatically configured using environment variables (e.g. HONEYB
       notifier: :honeybadger
     )
 
+#### AirbrakeNotifier
+
+For more information on airbrake please refer to their [github repo](https://github.com/airbrake/airbrake).
+
+#### !!!ATTENTION
+
+The airbrake gem is required for the AirbrakeNotifier. Please add the gem to your Gemfile as follows:
+
+    gem 'airbrake'
+
+
+##### Airbrake Usage
+
+    require 'denouncer'
+
+    Denouncer.configure(
+      application_name: "my_app",
+      notifier: :airbrake,
+      api_key: 'my_key'
+    )
 
 #### Multiple notifier configuration
 
@@ -210,3 +230,20 @@ The metadata is optional and defaults to nil.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+## How to add a new notfier?
+
+    # Copy the console notifier as base
+    cp lib/denouncer/notifiers/console_notifier.rb lib/denouncer/notifiers/<name>_notifier.rb
+
+    # add your notifier to the module
+    vim lib/denouncer/notifiers.rb
+
+    # adjust the notifier as needed
+    # implement name, set_configuration! and notify methods
+    vim lib/denouncer/notifiers/<name>_notifier.rb
+
+    # add a section for the notifier to the documentation
+    vim README.md
+
+    # follow the instructions above (Contributing)
