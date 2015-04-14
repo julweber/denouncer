@@ -33,20 +33,30 @@ module Denouncer
       # @param metadata [Hash]
       def notify(error, metadata = nil)
         Net::SMTP.start(config[:server], config[:port], config[:domain], config[:username], config[:password], config[:authtype]) do |smtp|
-          smtp.send_message generate_text_message(error, metadata), config[:sender], config[:recipients]
+          smtp.send_message generate_error_text_message(error, metadata), config[:sender], config[:recipients]
+        end
+      end
+
+      # Sends a info notification.
+      #
+      # @param info_message [String]
+      # @param metadata [Hash]
+      def info(info_message, metadata = nil)
+        Net::SMTP.start(config[:server], config[:port], config[:domain], config[:username], config[:password], config[:authtype]) do |smtp|
+          smtp.send_message generate_info_text_message(info_message, metadata), config[:sender], config[:recipients]
         end
       end
 
       private
 
-      def generate_text_message(error, metadata = nil)
+      def generate_error_text_message(error, metadata = nil)
         hostname = Socket.gethostname
         time_now = get_current_timestamp
         recipients_list = formatted_recipients
         msgstr = <<END_OF_MESSAGE
 From: #{config[:application_name]} <#{config[:sender]}>
 To: #{recipients_list}
-Subject: #{generate_subject(error)}
+Subject: #{generate_error_subject(error)}
 Date: #{formatted_time(time_now)}
 
 Application name:
@@ -69,6 +79,38 @@ Backtrace:
 
 Error cause:
 #{get_error_cause(error)}
+
+Metadata:
+#{metadata.to_s}
+
+-- -- -- -- -- -- -- -- -- -- --
+This message was generated using the denouncer exception notifier gem.
+( http://github.com/julweber/denouncer )
+END_OF_MESSAGE
+        return msgstr
+      end
+
+      def generate_info_text_message(message, metadata = nil)
+        hostname = Socket.gethostname
+        time_now = get_current_timestamp
+        recipients_list = formatted_recipients
+        msgstr = <<END_OF_MESSAGE
+From: #{config[:application_name]} <#{config[:sender]}>
+To: #{recipients_list}
+Subject: #{generate_info_subject}
+Date: #{formatted_time(time_now)}
+
+Application name:
+#{config[:application_name]}
+
+Hostname:
+#{hostname}
+
+Notification time:
+#{time_now}
+
+Info message:
+#{message}
 
 Metadata:
 #{metadata.to_s}
@@ -106,8 +148,12 @@ END_OF_MESSAGE
         return str
       end
 
-      def generate_subject(error)
-        "[Denouncer] - [Error] - #{config[:application_name]} - #{error.class.name} - #{get_current_timestamp.to_s}"
+      def generate_error_subject(error)
+        "[Denouncer] - [ERROR] - #{config[:application_name]} - #{error.class.name} - #{get_current_timestamp.to_s}"
+      end
+
+      def generate_info_subject
+        "[Denouncer] - [INFO] - #{config[:application_name]} - #{get_current_timestamp.to_s}"
       end
     end
   end

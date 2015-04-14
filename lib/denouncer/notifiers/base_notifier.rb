@@ -36,11 +36,19 @@ module Denouncer
         raise NotImplementedException("This method needs to be implemented in a sub-class!")
       end
 
-      # Sends a notification.
+      # Sends an error notification.
       #
       # @param error [StandardError]
       # @param metadata [Hash]
       def notify(error, metadata = nil)
+        raise NotImplementedException("This method needs to be implemented in a sub-class!")
+      end
+
+      # Sends a info notification.
+      #
+      # @param info_message [String]
+      # @param metadata [Hash]
+      def info(info_message, metadata = nil)
         raise NotImplementedException("This method needs to be implemented in a sub-class!")
       end
     end

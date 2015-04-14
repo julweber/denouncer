@@ -30,6 +30,17 @@ module Denouncer
           backtrace: error.backtrace
         )
       end
+
+      # Sends a info notification.
+      #
+      # @param info_message [String]
+      # @param metadata [Hash]
+      def info(info_message, metadata = nil)
+        Airbrake.notify(Denouncer::InfoError.new(info_message),
+          api_key: config[:api_key],
+          error_message: info_message
+        )
+      end
     end
   end
 end

@@ -195,6 +195,8 @@ The example below configures the amqp and smtp notifiers in parallel.
 
 ## Usage
 
+### Error notification
+
 The example below shows a basic usage pattern for denouncer notifications.
 Catch exceptions, then use denouncer's notify function and then re-raise the error again.
 
@@ -215,6 +217,10 @@ or
 
 The metadata is optional and defaults to nil.
 
+### Information notification
+
+    Denouncer.info 'This contains lots of valuable information :)', { t1: "metadata 1", t2: "metadata 2" }
+
 ## Test Suite
 
     bundle exec rspec
@@ -222,6 +228,10 @@ The metadata is optional and defaults to nil.
 ## Architecture overview
 
 [This](https://docs.google.com/drawings/d/16DaQhsAwcr-5zlguhKGwigpdNpOgO4-IXssLst7zlUM/edit?usp=sharing) illustration shows the basic architecture of the denouncer gem.
+
+## TODOs
+
+* Implement better test coverage
 
 ## Contributing
 

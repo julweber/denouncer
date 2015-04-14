@@ -99,33 +99,33 @@ describe Denouncer::Notifiers::SmtpNotifier do
     end
   end
 
-  describe "#generate_text_message" do
+  describe "#generate_error_text_message" do
     let(:notifier) { Denouncer::Notifiers::SmtpNotifier.new config }
     let(:metadata_var) { "HASHVAR123" }
     let(:metadata) { { hash_var: metadata_var } }
 
     it "should generate a text message" do
-      msg = notifier.send(:generate_text_message, error, metadata)
+      msg = notifier.send(:generate_error_text_message, error, metadata)
       expect(msg).to be_kind_of String
     end
 
     it "should contain the error message" do
-      msg = notifier.send(:generate_text_message, error, metadata)
+      msg = notifier.send(:generate_error_text_message, error, metadata)
       expect(msg).to match error.message
     end
 
     it "should contain the error class" do
-      msg = notifier.send(:generate_text_message, error, metadata)
+      msg = notifier.send(:generate_error_text_message, error, metadata)
       expect(msg).to match error.class.name
     end
 
     it "should contain the application_name" do
-      msg = notifier.send(:generate_text_message, error, metadata)
+      msg = notifier.send(:generate_error_text_message, error, metadata)
       expect(msg).to match app_name
     end
 
     it "should contain the metadata hash" do
-      msg = notifier.send(:generate_text_message, error, metadata)
+      msg = notifier.send(:generate_error_text_message, error, metadata)
       expect(msg).to match metadata_var
     end
   end

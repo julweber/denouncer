@@ -66,52 +66,45 @@ describe Denouncer::Notifiers::AmqpNotifier do
     end
   end
 
-  describe "#generate_json_message" do
+  describe "#generate_error_hash" do
     let(:notifier) { Denouncer::Notifiers::AmqpNotifier.new config }
     let(:metadata_var) { "HASHVAR123" }
     let(:metadata) { { hash_var: metadata_var } }
 
-    it "should generate a json encoded message" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      expect(msg).to be_kind_of String
-      expect { JSON.parse(msg) }.not_to raise_error
+    it "should generate a hash" do
+      msg = notifier.send(:generate_error_hash, error, metadata)
+      expect(msg).to be_kind_of Hash
     end
 
     it "should contain the error message" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["error_message"]).to match (error.message)
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:error_message]).to match (error.message)
     end
 
     it "should contain the error class" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["error_class"]).to eq (error.class.name)
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:error_class]).to eq (error.class.name)
     end
 
     it "should contain the application_name" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["application_name"]).to eq app_name
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:application_name]).to eq app_name
     end
 
     it "should contain the metadata hash" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["metadata"]).to be_kind_of Hash
-      expect(parsed["metadata"]["hash_var"]).to eq metadata_var
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:metadata]).to be_kind_of Hash
+      expect(h[:metadata][:hash_var]).to eq metadata_var
     end
 
     it "should contain the backtrace" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["error_backtrace"]).to be_kind_of Array
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:error_backtrace]).to be_kind_of Array
     end
 
     it "should contain the notification_time" do
-      msg = notifier.send(:generate_json_message, error, metadata)
-      parsed = JSON.parse(msg)
-      expect(parsed["notification_time"]).not_to be_nil
+      h = notifier.send(:generate_error_hash, error, metadata)
+      expect(h[:notification_time]).not_to be_nil
     end
   end
 end

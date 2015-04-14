@@ -33,13 +33,22 @@ module Denouncer
       # @param error [StandardError]
       # @param metadata [Hash]
       def notify(error, metadata = nil)
-        msg = generate_json_message error, metadata
+        msg = generate_error_hash(error, metadata).to_json
+        send_message_via_amqp msg
+      end
+
+      # Sends a info notification.
+      #
+      # @param info_message [String]
+      # @param metadata [Hash]
+      def info(info_message, metadata = nil)
+        msg = generate_info_hash(info_message, metadata).to_json
         send_message_via_amqp msg
       end
 
       private
 
-      def generate_message_hash(error, metadata = nil)
+      def generate_error_hash(error, metadata = nil)
         hostname = Socket.gethostname
         time_now = get_current_timestamp
         {
@@ -54,8 +63,16 @@ module Denouncer
         }
       end
 
-      def generate_json_message(error, metadata = nil)
-        generate_message_hash(error, metadata).to_json
+      def generate_info_hash(message, metadata = nil)
+        hostname = Socket.gethostname
+        time_now = get_current_timestamp
+        {
+          notification_time: time_now,
+          application_name: config[:application_name],
+          hostname: hostname,
+          message: message,
+          metadata: metadata
+        }
       end
 
       def send_message_via_amqp(message)

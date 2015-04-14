@@ -28,6 +28,18 @@ module Denouncer
           parameters: metadata
         )
       end
+
+      # Sends a info notification.
+      #
+      # @param info_message [String]
+      # @param metadata [Hash]
+      def info(info_message, metadata = nil)
+        Honeybadger.notify(
+          error_message: info_message,
+          parameters: metadata
+        )
+      end
+
     end
   end
 end

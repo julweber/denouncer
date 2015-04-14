@@ -2,6 +2,7 @@ require "denouncer/version"
 
 module Denouncer
   autoload :Notifiers, File.expand_path('../denouncer/notifiers', __FILE__)
+  autoload :InfoError, File.expand_path('../denouncer/info_error', __FILE__)
 
   DEFAULT_NOTIFIER = :smtp
 
@@ -50,7 +51,7 @@ module Denouncer
     end
   end
 
-  # Sends a notification using the configured notifier.
+  # Sends a notification using the configured notifiers.
   #
   # @param error [StandardError]
   # @param metadata [Hash]
@@ -65,6 +66,25 @@ module Denouncer
         return true
       rescue => err
         puts "An error occured while sending an exception notification via denouncer! Error: #{err.message}, Backtrace: #{err.backtrace}"
+      end
+    else
+      return false
+    end
+  end
+
+  # Sends a info notification using the configured notifiers.
+  #
+  # @param error [StandardError]
+  # @param metadata [Hash]
+  def self.info(info_message, metadata = nil)
+    if is_configured?
+      begin
+        notifiers.each do |notif|
+          notif.info info_message, metadata
+        end
+        return true
+      rescue => err
+        puts "An error occured while sending an info notification via denouncer! Error: #{err.message}, Backtrace: #{err.backtrace}"
       end
     else
       return false
