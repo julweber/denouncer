@@ -13,7 +13,6 @@ module Denouncer
       def set_configuration!(options)
         require 'honeybadger'
         require 'rack/request'
-        Honeybadger.start
         return options
       end
 
